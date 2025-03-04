@@ -1,0 +1,27 @@
+{
+  "name": "habitos_atomicos",
+  "version": "1.0.0",
+  "description": "APP de Programación Avanzada para TDS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msaints10/habitos_atomicos.git"
+  },
+  "keywords": [],
+  "author": "Manuel Santos - 18001167",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msaints10/habitos_atomicos/issues"
+  },
+  "homepage": "https://github.com/msaints10/habitos_atomicos#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.12.0",
+    "pug": "^3.0.3"
+  }
+}
