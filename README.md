@@ -44,6 +44,26 @@ npm install
 npm start
 ```
 
-> **Nota:** El servidor estará disponible en http://localhost:3000
+> **Nota:** El servidor estará disponible en http://localhost:3000 sino se requiere en ese puerto en el .env se puede cambiar por el puerto que desee
 
+# Frontend
+
+### Navegar al directorio frontend
+Para inicializar el frontend es necesario ubicarse en la carpeta **frontend**
+
+```bash
+cd frontend
+```
+
+### Instalar dependencias
+Instalar todas las dependencias recomendado node >= 22.14.0
+
+```bash
+npm install
+```
+
+### Iniciar el servidor en modo desarrollo
+```bash
+npm run dev
+```
 
