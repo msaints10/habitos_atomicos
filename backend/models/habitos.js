@@ -10,7 +10,23 @@ const habitoSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    ultimaActualizacion: {
+        type: Date,
+        default: Date.now
+    },
+    ultimoMarcado: {
+        type: Date,
+        default: Date.now
+    },
+    dias: {
+        type: Number,
+        default: 1,
+    },
+    iniciadoEn: {
+        type: Date,
+        default: Date.now
+    },
 }, {
     timestamps: true
 });

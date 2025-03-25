@@ -86,4 +86,47 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// PATCH marcar un hábito como completado
+router.patch('/marcarcompletado/:id', async (req, res) => {
+    try {
+        const habito = await Habito.findById(req.params.id);
+        if (!habito) {
+            return res.status(404).json({ message: 'No se puede encontrar el hábito' });
+        }
+        habito.ultimoMarcado = new Date();
+        if (diferenciaTiempoEnHoras(habito.ultimoMarcado, habito.ultimaActualizacion) > 24) {
+            habito.dias = 1;
+            habito.iniciadoEn = new Date();
+            habito.ultimaActualizacion = habito.ultimoMarcado;
+            const habitoActualizado = await habito.save();
+            res.status(200).json({ mensaje: 'Hábito reiniciado', habito: habitoActualizado });
+        }
+        else {
+            habito.dias = diferenciaTiempoEnDias(habito.ultimoMarcado, habito.iniciadoEn);
+            habito.ultimaActualizacion = new Date();
+            const habitoActualizado = await habito.save();
+            res.status(200).json({ mensaje: 'Hábito marcado como completado', habito: habitoActualizado });
+        }
+    } catch (error) {
+        res.status(400).json({ mensaje: error.message });
+    }
+});
+
+const diferenciaTiempoEnHoras = (fecha1, fecha2) => {
+    if (!fecha1 || !fecha2) return 0;
+    const date1 = fecha1 instanceof Date ? fecha1 : new Date(fecha1);
+    const date2 = fecha2 instanceof Date ? fecha2 : new Date(fecha2);
+    const diferencia = Math.abs(date1.getTime() - date2.getTime());
+    return diferencia / (1000 * 60 * 60);
+}
+
+const diferenciaTiempoEnDias = (fecha1, fecha2) => {
+    if (!fecha1 || !fecha2) return 1;
+    const date1 = fecha1 instanceof Date ? fecha1 : new Date(fecha1);
+    const date2 = fecha2 instanceof Date ? fecha2 : new Date(fecha2);
+    const diferencia = Math.abs(date1.getTime() - date2.getTime());
+    const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+    return dias === 0 ? 1 : dias;
+}
+
 module.exports = router;
