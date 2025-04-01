@@ -1,11 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const Habito = require('../models/habitos');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+
+const authenticateToken = (req, res, next) => {
+    const token = req.header('Authorization');
+    if (!token) return res.status(401).json({ message: 'Acceso denegado, token no proporcionado' });
+
+    try {
+        const tokenWithoutBearer = token.replace('Bearer ', '');
+        const verified = jwt.verify(tokenWithoutBearer, process.env.JWT_SECRET);
+        req.usuario = verified; // Almacena el usuario verificado en la solicitud
+        next();
+    } catch (error) {
+        console.log(error);
+        return res.status(403).json({ message: 'Token no válido o expirado' });
+    }
+};
 
 // GET todos los hábitos
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
     try {
-        const habitos = await Habito.find();
+        if (!req.usuario || !req.usuario.usuarioId) {
+            return res.status(500).json({ message: 'Error al obtener los hábitos' });
+        }
+        const habitos = await Habito.find({'usuarioId': new mongoose.Types.ObjectId(req.usuario.usuarioId)});
         res.json(habitos);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -13,9 +33,13 @@ router.get('/', async (req, res) => {
 });
 
 // GET un hábito
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticateToken, async (req, res) => {
     try {
-        const habito = await Habito.findById(req.params.id);
+        let usuarioId = req.usuario && req.usuario.usuarioId ? req.usuario.usuarioId : res.status(500).json({ message: 'Error al obtener el hábito' });
+        const habito = await Habito.findOne({ 
+            _id: req.params.id, 
+            usuarioId: new mongoose.Types.ObjectId(usuarioId) 
+        });
         if (!habito) {
             return res.status(404).json({ message: 'No se puede encontrar el hábito' });
         }
@@ -26,10 +50,13 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST nuevo hábito
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
+    let usuarioId = req.usuario && req.usuario.usuarioId ? req.usuario.usuarioId : res.status(500).json({ message: 'Error al guardar el hábito' });
+
     const habito = new Habito({
         titulo: req.body.titulo,
-        descripcion: req.body.descripcion
+        descripcion: req.body.descripcion,
+        usuarioId: new mongoose.Types.ObjectId(usuarioId),
     });
 
     try {
@@ -41,9 +68,13 @@ router.post('/', async (req, res) => {
 });
 
 // DELETE eliminar un hábito
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
     try {
-        const habito = await Habito.findById(req.params.id);
+        let usuarioId = req.usuario && req.usuario.usuarioId ? req.usuario.usuarioId : res.status(500).json({ message: 'Error al eliminar el hábito' });
+        const habito = await Habito.findOne({ 
+            _id: req.params.id, 
+            usuarioId: new mongoose.Types.ObjectId(usuarioId) 
+        });
         if (!habito) {
             return res.status(404).json({ message: 'No se puede encontrar el hábito' });
         }
@@ -55,9 +86,13 @@ router.delete('/:id', async (req, res) => {
 });
 
 // PATCH actualizar un hábito
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', authenticateToken, async (req, res) => {
     try {
-        const habito = await Habito.findById(req.params.id);
+        let usuarioId = req.usuario && req.usuario.usuarioId ? req.usuario.usuarioId : res.status(500).json({ message: 'Error al actualizar el hábito' });
+        const habito = await Habito.findOne({ 
+            _id: req.params.id, 
+            usuarioId: new mongoose.Types.ObjectId(usuarioId) 
+        });
         if (!habito) {
             return res.status(404).json({ message: 'No se puede encontrar el hábito' });
         }
@@ -71,9 +106,13 @@ router.patch('/:id', async (req, res) => {
 });
 
 // PUT actualizar un hábito
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
     try {
-        const habito = await Habito.findById(req.params.id);
+        let usuarioId = req.usuario && req.usuario.usuarioId ? req.usuario.usuarioId : res.status(500).json({ message: 'Error al actualizar el hábito' });
+        const habito = await Habito.findOne({ 
+            _id: req.params.id, 
+            usuarioId: new mongoose.Types.ObjectId(usuarioId) 
+        });
         if (!habito) {
             return res.status(404).json({ message: 'No se puede encontrar el hábito' });
         }
@@ -87,9 +126,13 @@ router.put('/:id', async (req, res) => {
 });
 
 // PATCH marcar un hábito como completado
-router.patch('/marcarcompletado/:id', async (req, res) => {
+router.patch('/marcarcompletado/:id', authenticateToken, async (req, res) => {
     try {
-        const habito = await Habito.findById(req.params.id);
+        let usuarioId = req.usuario && req.usuario.usuarioId ? req.usuario.usuarioId : res.status(500).json({ message: 'Error al marcar completado el hábito' });
+        const habito = await Habito.findOne({ 
+            _id: req.params.id, 
+            usuarioId: new mongoose.Types.ObjectId(usuarioId) 
+        });
         if (!habito) {
             return res.status(404).json({ message: 'No se puede encontrar el hábito' });
         }

@@ -1,14 +1,41 @@
-export const fetchHabitos = async () => {
-    const response = await fetch("http://localhost:3002/api/habitos");
+export const fetchHabitos = async (token: string) => {
+    const response = await fetch("http://localhost:3002/api/habitos", 
+        {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
     if (!response.ok) {
         throw new Error("Error fetching habitos");
     }
-    return response.json();
+    return response;
 };
 
-export const marcarHabitoCompletado = async (habitoId: string) => {
+export const fetchAgregarHabito = async (titulo: string, descripcion: string, token: string) => {
+    const response = await fetch("http://localhost:3002/api/habitos", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ "titulo": titulo, "descripcion": descripcion })
+    });
+    if (!response.ok) {
+        throw new Error("Error al agregar el hábito");
+    }
+    return response;
+};
+
+export const marcarHabitoCompletado = async (habitoId: string, token: string) => {
     const response = await fetch(`http://localhost:3002/api/habitos/marcarcompletado/${habitoId}`, {
-        method: "PATCH"
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
     });
     const responseJson = await response.json();
     if (!response.ok) {

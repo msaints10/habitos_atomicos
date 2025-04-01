@@ -14,7 +14,7 @@ router.post('/registro', async (req, res) => {
         res.status(201).json({ mensaje: "Usuario Registrado Correctamente" });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Error en el Registro", descripcion: error.toString() });
+        res.status(500).json({ mensaje: "Error en el Registro", error: error.toString() });
     }
 });
 
@@ -26,16 +26,16 @@ router.post('/login', async (req, res) => {
             .findOne({ username: username });
 
         if (!usuario) {
-            return res.status(400).json({ error: "Usuario no encontrado" });
+            return res.status(400).json({ mensaje: "Usuario no encontrado" });
         }
 
         const passwordValido = await bcryptjs.compare(password, usuario.password);
         if (!passwordValido) {
-            return res.status(400).json({ error: "Contraseña incorrecta" });
+            return res.status(400).json({ mensaje: "Contraseña incorrecta" });
         }
 
         const token = jwt.sign({
-            userId: usuario._id
+            usuarioId: usuario._id
         }, process.env.JWT_SECRET, {
             expiresIn: '7d'
         });
@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
         res.status(200).json({ mensaje: "Inicio de Sesión Exitóso", token });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: "Error en el Login", descripcion: error.toString() });
+        res.status(500).json({ mensaje: "Error en el Login", error: error.toString() });
     }
 }); 
 

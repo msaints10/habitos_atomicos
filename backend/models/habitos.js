@@ -27,6 +27,11 @@ const habitoSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    usuarioId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'usuario',
+        required: true
+    },
 }, {
     timestamps: true
 });

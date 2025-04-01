@@ -1,21 +1,26 @@
 import { Habito } from "../features/habito/habitoSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { marcarHabitoCompletadoThunk, fetchHabitosThunk } from "@/features/habito/habitoSlice";
+import { marcarHabitoCompletadoThunk, fetchHabitosThunk, agregarHabitoThunk } from "@/features/habito/habitoSlice";
 import { AppState, AppDispatch } from "@/Redux/store";
+import { useState } from "react";
 
 type HabitosProps = {
   habitos: Habito[];
 };
 
-const handleMarcarHabitoCompletado = async (dispatch: AppDispatch, habitoId: string) => {
-  dispatch(marcarHabitoCompletadoThunk(habitoId));
-  dispatch(fetchHabitosThunk());
+const handleMarcarHabitoCompletado = async (dispatch: AppDispatch, habitoId: string, token: string) => {
+  dispatch(marcarHabitoCompletadoThunk({habitoId, token}));
+  if (token) {
+    dispatch(fetchHabitosThunk(token));
+  }
 };
 
 export default function Habitos({ habitos }: HabitosProps) {
   const dispatch = useDispatch<AppDispatch>();
   const estatus = useSelector((state: AppState) => state.habito.estatus);
   const error = useSelector((state: AppState) => state.habito.error);
+  const usuario = useSelector((state: AppState) => state.usuario.usuario);
+  const [titulo, setTitulo] = useState("");
 
   const calcularProgreso = (dias: number) : number => {
     return Math.min((dias/66)*100, 100);
