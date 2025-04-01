@@ -40,7 +40,7 @@ export const fetchLoginUsuarioThunk = createAsyncThunk("usuario/fetchLoginUsuari
     if (!response.ok) {
         return rejectWithValue("Error al iniciar sesión");
     } else if (responseJson.mensaje.toString() === "Inicio de Sesión Exitóso") {
-        return responseJson.mensaje; // Usuario login correctamente
+        return responseJson.token; // Usuario login correctamente
     } else {
         return rejectWithValue(responseJson.mensaje); // Error
     }
@@ -69,7 +69,7 @@ const usuarioSlice = createSlice({
         });
         builder.addCase(fetchLoginUsuarioThunk.fulfilled, (state, action) => {
             state.estatus = "success";
-            state.error = null;
+            state.usuario = action.payload;
             state.error = action.payload as string;
         });
         builder.addCase(fetchLoginUsuarioThunk.rejected, (state, action) => {

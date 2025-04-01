@@ -91,7 +91,7 @@ const habitoSlice = createSlice({
             state.estatus[action.meta.arg.habitoId] = "failed";
             state.error[action.meta.arg.habitoId] = action.payload as string;
         });
-        builder.addCase(marcarHabitoCompletadoThunk.fulfilled, (state, action) => {
+        builder.addCase(agregarHabitoThunk.fulfilled, (state, action) => {
             state.habitos.push(action.payload);
         });
     }
