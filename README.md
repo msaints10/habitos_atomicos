@@ -6,6 +6,10 @@ Creado por: **Manuel Santos - 18001167**
 ## Descripción
 Este proyecto permite a los usuarios crear y gestionar hábitos diarios utilizando una API REST construida con Express.js y MongoDB Atlas.
 
+# Rutas de Despliegue en Vercel
+- [Frontend - https://frontend-ten-sigma-97.vercel.app/](https://frontend-ten-sigma-97.vercel.app/)
+- [Backend - https://backend-swart-eight-45.vercel.app/](https://backend-swart-eight-45.vercel.app/)
+
 # Backend
 
 ### Navegar al directorio backend
