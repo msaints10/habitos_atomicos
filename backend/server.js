@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cors(
     {
-        origin: 'https://backend-swart-eight-45.vercel.app',
+        origin: 'https://frontend-ten-sigma-97.vercel.app',
         credentials: true
     }
 ));
