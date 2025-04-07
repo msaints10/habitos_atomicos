@@ -24,8 +24,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.0",
+    "morgan": "^1.10.0",
     "pug": "^3.0.3",
     "vercel": "^41.0.2"
   }
