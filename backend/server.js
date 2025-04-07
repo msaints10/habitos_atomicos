@@ -7,8 +7,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
 
-var habitosRouter = require('./routes/habitos');
-var usuariosRouter = require('./routes/usuarios');
+const connectDB = require('./config/db');
+const habitosRouter = require('./routes/habitos');
+const usuariosRouter = require('./routes/usuarios');
 
 const app = express();
 
