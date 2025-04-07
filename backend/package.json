@@ -4,7 +4,8 @@
   "description": "APP de Programación Avanzada para TDS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www",
+    "vercel-start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.0",
-    "pug": "^3.0.3"
+    "pug": "^3.0.3",
+    "vercel": "^41.0.2"
   }
 }

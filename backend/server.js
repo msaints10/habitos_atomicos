@@ -9,20 +9,20 @@ const path = require('path');
 const app = express();
 
 // Configurar motor de vistas
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'pug');
 
 app.use(express.json());
 app.use(cors(
     {
-        origin: process.env.CORS_ORIGIN,
+        origin: 'https://backend-swart-eight-45.vercel.app',
         credentials: true
     }
 ));
 
 // Rutas
 app.get('/', (req, res) => {
-    res.render('index');
+    res.json({ title: 'API de Hábitos' });
 });
 app.use('/api/habitos', habitosRouter);
 app.use('/api/usuarios', usuariosRouter);
@@ -30,9 +30,16 @@ app.use('/api/usuarios', usuariosRouter);
 // Conexión a MongoDB
 connectDB();
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en puerto ${PORT}`);
+app.use(function (req, res, next) {
+    next(createError(404));
+});
+
+app.use(function (err, req, res, next) {
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    res.status(err.status || 500);
+    res.json({'error': err });
 });
 
 module.exports = app;

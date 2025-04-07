@@ -1,5 +1,5 @@
 export const fetchRegistroUsuario =  async (username: string, password: string) => {
-    const response = await fetch('http://localhost:3002/api/usuarios/registro', {
+    const response = await fetch('https://backend-g5ia1rc8z-msaints10s-projects.vercel.app/api/usuarios/registro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ export const fetchRegistroUsuario =  async (username: string, password: string) 
 };
 
 export const fetchLoginUsuario = async (username: string, password: string) => {
-    const response = await fetch('http://localhost:3002/api/usuarios/login', {
+    const response = await fetch('https://backend-g5ia1rc8z-msaints10s-projects.vercel.app/api/usuarios/login', {
         method: 'POST',
         credentials: 'include',
         headers: {
